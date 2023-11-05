@@ -13,7 +13,7 @@ always_comb begin
   Mem_Write =	'b0;   // 
   Reg_C 	   =  2'b00;   // 
   Write_C   =	2'b00;   // 
-  ALU_Op	   =  3'b111; // 
+  ALU_Op	   =  3'b000; // 
 
 /*case(instr)    // override defaults with exceptions
   'b0000:  begin					// store operation

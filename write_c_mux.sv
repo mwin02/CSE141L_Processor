@@ -4,7 +4,7 @@ module write_c_mux (
     input wire [7:0] choice1,  // Input data 1
     input wire [7:0] choice2,  // Input data 2
     input wire [7:0] choice3,  // Input data 3
-    output wire [7:0] datOut // Output data
+    output logic [7:0] datOut // Output data
 );
 
 always_comb begin

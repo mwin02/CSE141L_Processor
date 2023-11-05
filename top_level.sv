@@ -3,10 +3,12 @@ module top_level(
   input        clk, reset, req, 
   output logic done);
   parameter D = 12,             // program counter width
-    A = 3;             		  // ALU command bit width
+    A = 3;             		  	  // ALU command bit width
 	 
   wire[D-1:0] target, 			  // jump 
               prog_ctr;
+				  
+  wire[2:0] jumpAddr;
   
   wire[7:0]   datA,datB,		  // from RegFile
 				  rslt;               // alu output
@@ -24,8 +26,10 @@ module top_level(
 		  
   wire[A-1:0] alu_cmd;
   wire[8:0]   mach_code;          // machine code
-  wire[2:0] rd_addrA, rd_adrB;    // address pointers to reg_file
+  wire[2:0] rd_addrA, rd_addrB;    // address pointers to reg_file
   wire[7:0] datWrite;
+  wire[7:0] immediate;
+  wire[7:0] memDatOut;
   
   assign branch_en = zeroQ & Branch;
 // fetch subassembly
@@ -38,17 +42,22 @@ module top_level(
 		    .target           ,
 		    .prog_ctr          );
 
-// lookup table to facilitate jumps/branches
-  PC_LUT #(.D(D))
-    pl1 (.addr  (how_high),
-         .target          );   
+
 
 // contains machine code
   instr_ROM ir1(.prog_ctr,
                .mach_code);
+					
+// lookup table to facilitate jumps/branches
+  assign jumpAddr = mach_code[2:0];
+  
+  PC_LUT #(.D(D))
+    pl1 (.addr  (jumpAddr),
+         .target (target));   
 
+			
 // control decoder
-  Control ctl1(.instr(mach_code),
+  Control ctl1(.instr(mach_code[3:0]),
   .Branch  , 
   .Write_Reg , 
   .Mem_Write   ,
@@ -59,8 +68,8 @@ module top_level(
   //TODO: Use control output to choose rd_addrA and rd_addrB
   
   assign alu_cmd  = mach_code[8:6];
-  assign relj = !mach_code[0];
-  assign absj = mach_code[0];
+  assign relj = !mach_code[2];
+  assign absj = mach_code[2];
   
   register_c_mux read1(.select(Reg_C),
 	.choice0 (mach_code[3:1]),
@@ -100,7 +109,7 @@ module top_level(
 				 .addr   (datB),
              .dat_out(memDatOut));
 				 
-  wire[7:0] immediate;
+
   
   Imm_LUT imm1 (.index(mach_code[3:1]) ,
     .value(immediate));

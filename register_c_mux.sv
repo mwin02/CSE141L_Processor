@@ -4,7 +4,7 @@ module register_c_mux (
     input wire [2:0] choice1,  // Input data 1
     input wire [2:0] choice2,  // Input data 2
     input wire [2:0] choice3,  // Input data 3
-    output wire [2:0] regNum // Output data
+    output logic [2:0] regNum // Output data
 );
 
 always_comb begin

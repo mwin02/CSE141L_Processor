@@ -10,7 +10,6 @@ module alu(
 
 always_comb begin
   rslt = 'b0;
-  zero = !rslt;
   if (ALU_Op == 2'b00) begin
 	  case(alu_cmd)
 		3'b001: // left_shift
@@ -21,12 +20,12 @@ always_comb begin
 		  rslt = inA & inB;
 		3'b100: // bitwise OR
 		  rslt = inA | inB;
-		3'b101: // bitwise AND (mask)
+		3'b101: // bitwise XOR
 		  rslt = inA ^ inB;
-		3'b110: // left rotate
+		3'b110: // no operation
 		  rslt = 0;
 		3'b111: // parity
-		  rslt = {7'b0000000, ^rslt};
+		  rslt = {7'b0000000, ^inB};
 	  endcase
   end
   else if (ALU_Op == 2'b01)
@@ -35,7 +34,8 @@ always_comb begin
     rslt = inA + 1;
   else 
     rslt = inA - inB;
-	
+  zero = !rslt;
 end
+
 
 endmodule
