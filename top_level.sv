@@ -57,7 +57,9 @@ module top_level(
 
 			
 // control decoder
-  Control ctl1(.instr(mach_code[3:0]),
+  Control ctl1(.opcode(mach_code[8:4]),
+  .funct1(mach_code[6:4]),
+  .funct2(mach_code[0]),
   .Branch  , 
   .Write_Reg , 
   .Mem_Write   ,
@@ -67,7 +69,7 @@ module top_level(
 
   //TODO: Use control output to choose rd_addrA and rd_addrB
   
-  assign alu_cmd  = mach_code[8:6];
+  assign alu_cmd  = mach_code[6:4];
   assign relj = !mach_code[2];
   assign absj = mach_code[2];
   
@@ -88,7 +90,7 @@ module top_level(
 
   reg_file #(.pw(3)) rf1(.dat_in(datWrite),	   // loads, most ops
               .clk         ,
-              .wr_en   (RegWrite),
+              .wr_en   (Write_Reg),
               .rd_addrA(rd_addrA),
               .rd_addrB(rd_addrB),
               .wr_addr (rd_addrA),      // in place operation
