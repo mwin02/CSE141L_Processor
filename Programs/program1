@@ -1,0 +1,130 @@
+  i = 0
+Movi r4 0 // r4 is i
+movi r7 31
+while i < 30:	
+startloop:
+	parities = 0000 0000
+Movi r0 0 // r0 is parities
+	topHalf = mem[i+1];// topHalf = 0000 0b11b10b9
+Movi r3 r4 
+Inc r3
+Load r1 r3 //topHalf = r1
+	botHalf = mem[i];
+Load r2 r4			// botHalf = b8b7b6b5 b4b3b2b1
+	botHalf = botHalf AND 1111 0000			// botHalf = b8b7b6b5 0000
+And r2 240
+	topHalf = topHalf XOR botHalf 			// topHalf = b8b7b6b5 0b11b10b9
+Xor r1 r2
+topHalf = parity(topHalf);				// topHalf = 0000 000p8
+Par r1 r1 
+parities = parities | topHalf;				// parities = 0000 000p8
+Or r0 r3
+parities = parities << 1;	
+Shftl r0 r0
+	topHalf = mem[i+1];					// topHalf = 0000 0b11b10b9
+Load r1 r3
+botHalf = mem[i];
+Load r2 r4						
+botHalf = botHalf AND 1000 1110;			// botHalf = b8000 b4b3b20
+And r2 142
+topHalf = topHalf XOR botHalf;			// topHalf = b8000 b4(b11⊕b3)(b10⊕b2)b9
+Xor r1 r2
+topHalf = parity(topHalf);				// topHalf = 0000 000p4
+Par r1 r1
+topHalf = topHalf << 4;				
+Shftl r1 4
+parities = parities | topHalf;				// parities = 000p4 000p8
+Or r0 r1
+	topHalf = mem[i+1];					
+Load r1 r3
+botHalf = mem[i];		
+Load r2 r4
+botHalf = botHalf AND 0110 1101;			// botHalf = 0b7b60 b4b30b1
+And r2 109
+topHalf = topHalf AND 0000 0110;			// topHalf = 0000 0b11b100
+And r1 6
+topHalf = topHalf XOR botHalf;			// topHalf = 0b7b60 b4(b3⊕b11)b10b1
+Xor r1 r2
+topHalf = parity(topHalf);				// topHalf = 0000 000p2
+Par r1 r1
+topHalf = topHalf << 2;
+Shftl r1 2
+parities = parities | topHalf;				// parities = 000p4 0p20p8
+Or r0 r1
+	
+topHalf = mem[i+1];					
+Load r1 r3
+botHalf = mem[i];		
+Load r2 r4
+botHalf = botHalf AND 0101 1011;			// botHalf = 0b70b5 b40b2b1
+And r2 91
+topHalf = topHalf AND 0000 0101;			// topHalf = 0000 0b110b9
+And r1 5
+topHalf = topHalf XOR botHalf;			// topHalf = 0b70b50 b4b11b2(b1⊕b9)
+Xor r1 r2
+topHalf = parity(topHalf);				// topHalf = 0000 000p1
+Par r1 r1
+topHalf = topHalf << 1;
+Shftl r1 1
+parities = parities | topHalf;				// parities = 000p4 0p2p1p8
+Or r0 r1
+	
+	topHalf = mem[i+1];					// topHalf = 0000 0b11b10b9
+Load r1 r3
+botHalf = mem[i];					// botHalf = b8b7b6b5 b4b3b2b1
+Load r2 r4
+topHalf = topHalf << 5;				// topHalf = b11b10b90 0000
+Shftl r1 5
+topHalf = topHalf OR parities;				// topHalf = b11b10b9p4 0p2p1p8
+Or r1 r0
+topHalf = topHalf AND 1110 0001;			// topHalf = b11b10b90 000p8
+And r1 225
+botHalf = botHalf >> 4 << 1;				// botHalf = 000b8 b7b6b50
+Shftl r2 1
+Shftr r2 4
+topHalf = topHalf OR botHalf;				// topHalf = b11b10b9b8 b7b6b5p8
+Or r1 r2
+mem[30 + i + 1] = topHalf;
+store r1 r7
+parities = parities AND 1111 1110;			// parities = 000p4 0p2p10
+And r0 254
+	botHalf = mem[i];					// botHalf = b8b7b6b5 b4b3b2b1
+Load r2 r0
+botHalf = botHalf << 4;				// botHalf = b4b3b2b1 0000
+Shftl r2 4
+temp = botHalf;	
+Load r5 r2 //r5 is temp
+temp = temp << 3;					// temp = b1000 0000
+Shftl r5 3
+temp = temp >> 4;					// temp = 0000 b1000
+Shftr r5 4
+botHalf = botHalf AND 1110 0000			// botHalf = b4b3b20 0000
+And r2 224
+botHalf = botHalf OR temp				// botHalf = b4b3b20 b1000
+Or r2 r5
+botHalf = botHalf OR parities				// botHalf = b4b3b2p4 b1p2p10
+Or r2 r0
+
+topHalf = mem[30 + i + 1];				// topHalf = b11b10b9b8 b7b6b5p8
+load r1 r7
+topHalf = parity(topHalf);				// topHalf = 0000 000( ^(b11:b5, p8) )
+Par r1 r1
+parities = botHalf;
+Movi r0 r2
+parities = parity(botHalf);				// parities = 0000 000( ^(b4:b1, p4, p2, p1) )
+Par r0 r2
+parities = parities XOR topHalf			// parities = 0000 000p0
+Xor r0 r1
+botHalf = botHalf XOR parities			// botHalf = b4b3b2p4 b1p2p1p0
+Xor r2 r0
+
+mem[30 + i] = botHalf;
+dec r7;
+store r2 r7
+i++;
+Inc r4
+inc r7
+	i++;
+Inc r4
+inc r7
+Bne r4 30 startloop

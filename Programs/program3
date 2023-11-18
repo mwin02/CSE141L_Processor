@@ -1,0 +1,178 @@
+accumulatorA = 0;
+movi r5 0;
+accumulatorB = 0;
+movi r6 0;
+pattern = mem[32] >> 3;				//pattern = 000p5 p4p3p2p1
+movi r3 32;
+load r0 r1;
+movi r3 3;
+shiftr r0 r3;
+i = 0;
+movi r4 0;
+movi r7 33;
+while (i < 32):
+startloop:
+		countByte = 0;
+movr r2 = 0;
+	singleByte = mem[i];
+movr r3 r4;
+load r1 r3;        
+	singleByte = singleByte & 0001 1111;			//singleByte = 000b5 b4b3b2b1
+movr r3 31;
+and r1 r3;
+	if (singleByte == pattern):
+bne r1 r0 endif
+		accumulatorA++;
+inc r5;
+		countByte = 1;
+mov r2 1;
+endif:
+
+	singleByte = mem[i] >> 1;
+movr r3 r4;
+load r1 r3;         
+movi r3 1;
+shiftr r1 r3;
+	singleByte = singleByte &               			//singleByte = 000b6 b5b4b3b2
+movi r3 31;
+and r1 r3;
+	if (singleByte == pattern):
+bne r1 r0 endif;
+		accumulatorA++;
+inc r5;
+		countByte = 1;
+mov r2 1;
+endif:
+	singleByte = mem[i] >> 2;
+movr r3 r4;
+load r1 r3;             
+movi r3 2;
+shiftr r1 r3;
+	singleByte = singleByte & 0001 1111;			//singleByte = 000b7 b6b5b4b3
+movi r3 31;
+and r1 r3;
+	if (singleByte == pattern):
+bne r1 r0 endif;
+		accumulatorA++;
+inc r5;
+		countByte = 1;
+mov r2 1;
+endif:
+	singleByte = mem[i] >> 3;
+movr r3 r4;
+load r1 r3;
+movi r3 3;
+shiftr r1 r3;
+	singleByte = singleByte & 0001 1111;			//singleByte = 000b8 b7b6b5b4
+movi r3 31;
+and r1 r3;
+if (singleByte == pattern):
+bne r1 r0 endif;
+		accumulatorA++;
+inc r5;
+		countByte = 1;
+mov r2 1;
+endif:
+	if (countByte == 1):
+movi r1 1
+bne r1 r2 endif;
+		accumulatorB++;
+inc r6;
+	i++;
+inc r4;
+movi r1 32;
+bne r4 r1 startloop;
+mem[33] = accumulatorA;
+store r5 r7;
+inc r7;
+mem[34] = accumulatorB;
+store r6 r7;
+inc r7;
+i = 0
+movi r4 0;
+while( i < 31):
+startloop2:
+	firstHalfByte = mem[i];						//firstHalfByte = b8b7b6b5 b4b3b2b1
+movr r3 r4;
+load r1 r3;
+	secondHalfByte = mem[i+1];					//secondHalfByte = b16b15b14b13 b12b11b10b9
+inc r3;
+load r2 r3;
+firstHalfByte = (firstHalfByte >> 4) ;				//firstHalfByte = 0000 b8b7b6b5
+load r3 4;
+shiftr r1 r3;
+secondHalfByte = (secondHalfByte << 4) & 0001 0000;	//secondHalfByte = 000b9 0000
+shiftl r2 r3;
+movi r3 16;
+and r2 r3;
+firstHalfByte = firstHalfByte | secondHalfByte;		//firstHalfByte = 000b9 b8b7b6b5
+or r1 r2;
+if (firstHalfByte == pattern):
+bne r1 r0 endif;	
+	accumulatorA++;
+inc r5;
+endif:
+	firstHalfByte = firstHalfByte >> 1				//firstHalfByte = 0000 b9b8b7b6
+mov r3 1;
+shiftr r1 r3;
+secondHalfByte = mem[i+1];
+movr r3 r4;
+inc r3;
+load r2 r3;
+	secondHalfByte = (secondHalfByte << 3) & 0001 0000;	//secondHalfByte = 000b10 0000
+movi r3 3;
+shiftl r2 r3;
+movi r3 16;
+and r2 r3;
+firstHalfByte = firstHalfByte | secondHalfByte;		//firstHalfByte = 000b10 b9b8b7b6
+or r1 r2;
+if (firstHalfByte == pattern):
+bne r1 r0 endif;
+		accumulatorA++;
+inc r5;
+endif:
+firstHalfByte = firstHalfByte >> 1				//firstHalfByte = 0000 b10b9b8b7
+movi r3 1;
+shiftr r1 r3;
+	secondHalfByte = mem[i+1];
+movr r3 r4;
+inc r3;
+load r2 r3;
+	secondHalfByte = (secondHalfByte << 2) & 0001 0000;	//secondHalfByte = 000b11 0000
+movi r3 2;
+shiftl r2 r3;
+movi r3 16;
+and r2 r3;
+firstHalfByte = firstHalfByte | secondHalfByte;		//firstHalfByte = 000b11 b10b9b8b7
+or r1 r2;
+if (firstHalfByte == pattern):
+bne r1 r0 endif;
+	accumulatorA++;
+inc r5;
+endif:
+firstHalfByte = firstHalfByte >> 1				//firstHalfByte = 0000 b11b10b9b8
+movi r3 1;
+shiftr r1 r3;
+secondHalfByte = mem[i+1];
+movr r3 r4;
+inc r3;
+load r2 r3;
+secondHalfByte = (secondHalfByte << 1) & 0001 0000;	//secondHalfByte = 000b12 0000
+movi r3 1;
+shiftl r2 r3;
+movi r3 16;
+and r2 r3;
+firstHalfByte = firstHalfByte | secondHalfByte;		//firstHalfByte = 000b12 b11b10b9b8
+or r1 r2;
+ if (firstHalfByte == pattern):
+bne r1 r0 endif;
+	accumulatorA++;
+inc r5;
+endif:
+inc r4;
+	i++;
+movi r3 31;
+bne r4 r3 startloop2;
+mem[35] = accumulatorA;
+store r5 r7;
+inc r7;

@@ -1,0 +1,8 @@
++1          000
++2          001
++7          010
++12         011
+startloop   100
+startloop2  101
+startloop3  110
+startloop4  111

@@ -1,0 +1,175 @@
+i = 30
+Movi r4 30
+movi r7 0
+while i < 60:
+startloop:
+	// calculating discrepancy vector 
+	parities = 0000 0000
+Movi r0 0
+	topHalf = mem[i+1];					// topHalf = b11b10b9b8 b7b6b5p8
+Movi r3 r4
+Inc r3
+Load r1 r3
+botHalf = mem[i];					// botHalf = b4b3b2p4 b1p2p1p0
+Load r2 r4
+topHalf = parity(topHalf);				// topHalf = 0000 000s8
+Par r1 r1
+parities = parities | topHalf;				// parities = 0000 000s8
+Or r0 r1
+parities = parities << 1;				// parities = 0000 00s80
+Shftl r0 1
+	topHalf = mem[i+1];					// topHalf = b11b10b9b8 b7b6b5p8
+Load r1 r3
+botHalf = mem[i];					// botHalf = b4b3b2p4 b1p2p1p0
+Load r2 r4
+botHalf = botHalf AND 1111 0000			// topHalf = b11b10b9b8 0000
+And r2 240
+topHalf = topHalf AND 1111 0000			// botHalf = b4b3b2p4 0000
+And r1 240
+topHalf = topHalf XOR botHalf 			
+Xor r1 r2
+topHalf = parity(topHalf);				// topHalf = 0000 000s4
+Par r1 r1
+parities = parities | topHalf;				// parities = 0000 00s8s4
+Or r0 r1
+parities = parities << 1;				// parities = 0000 0s8s40
+Shftl r0 1
+	topHalf = mem[i+1];					// topHalf = b11b10b9b8 b7b6b5p8
+Load r1 r3
+botHalf = mem[i];					// botHalf = b4b3b2p4 b1p2p1p0
+Load r2 r4
+botHalf = botHalf AND 1100 1100			// topHalf = b11b1000 b7b600
+And r2 204
+topHalf = topHalf AND 1100 1100			// botHalf = b4b300 b1p200
+And r1 204
+topHalf = topHalf XOR botHalf 			
+Xor r1 r2
+topHalf = parity(topHalf);				// topHalf = 0000 000s2
+Par r1
+parities = parities | topHalf;				// parities = 0000 0s8s4s2
+Or r0 r1
+parities = parities << 1;				// parities = 0000 s8s4s20
+Shftl r0 1
+	
+topHalf = mem[i+1];					// topHalf = b11b10b9b8 b7b6b5p8
+Load r1 r3
+botHalf = mem[i];					// botHalf = b4b3b2p4 b1p2p1p0
+Load r2 r4
+botHalf = botHalf AND 1010 1010			// topHalf = b110b90 b70b50
+And r2 170
+topHalf = topHalf AND 1010 1010			// botHalf = b40b20 b10p10
+And r1 170
+topHalf = topHalf XOR botHalf 			
+Xor r1 r2
+topHalf = parity(topHalf);				// topHalf = 0000 000s1
+Par r1 r1
+parities = parities | topHalf;				// parities = 0000 s8s4s2s1
+Or r0 r1
+parities = parities << 1;				// parities = 000s8 s4s2s10
+Shftl r0 1
+
+topHalf = mem[i+1];					// topHalf = b11b10b9b8 b7b6b5p8
+Load r1 r3
+botHalf = mem[i];					// botHalf = b4b3b2p4 b1p2p1p0
+Load r2 r4
+topHalf = topHalf XOR botHalf 			
+Xor r1 r2
+topHalf = parity(topHalf);				// topHalf = 0000 000s0
+Par r1
+parities = parities | topHalf;				// parities = 000s8 s4s2s1s0
+Or r0 r1
+	topHalf = mem[i];					// topHalf = b11b10b9b8 b7b6b5p8
+Load r1 r4	
+botHalf = mem[i+1];					// botHalf = b4b3b2p4 b1p2p1p0
+Load r2 r3
+errorBit = parities >> 1;				// errorBit = 0000 s8s4s2s1 = errorLocation
+store r0 r7;			//store parities in mem[0]
+inc r7;			
+Shftr r0 1//errorBit is r0
+temp = 0000 0001;
+Movi r1 1 // temp is r1				
+	temp = temp << (errorBit);				// temp will be a one hot encoding of the value of errorLocation
+Shftl r1 r0
+	if (temp == 0):						// errorLocation > 8
+bne r1 0 else
+		errorBit = errorBit AND 0000 1000		// temp = temp - 8	
+And r0 16
+		temp = 0000 0001;					
+Movi r1 1
+		temp = temp << (errorBit);			// temp will be a one hot encoding of the value of error
+Shftl r1 r0
+		topHalf = mem[i];					// topHalf = b11b10b9b8 b7b6b5p8
+Load r2 r4
+		topHalf = topHalf XOR temp;			// flip topHalf’s bit by errorLocation value - 8
+Xor r1 r2
+		botHalf = mem[i+1];					// botHalf = b4b3b2p4 b1p2p1p0
+Load r3 r3
+Bne 0 1 endElse
+	else:
+Else:
+		botHalf = mem[i+1];					// botHalf = b4b3b2p4 b1p2p1p0
+Load r3 r3
+		botHalf = botHalf XOR temp;			// flip botHalf’s bit by errorLocation value
+xor r3 r1
+		topHalf = mem[i];
+Load r2 r4
+EndElse:
+
+movr r5 r2			//save r2 (topHalf) in r5
+movr r6 r3			//save r3 (botHalf) in r6
+dec r7;
+load r0 r7;			//restore parities as r0
+	errorCount = 0000 0000;
+movi r1 0;
+	errorBit = parities >> 1;				// errorBit = 0000 s8s4s2s1 = errorLocation
+movr r2 r0;
+shiftr r2 1;
+	if (errorBits != 0):
+bne r2 0 endif;
+		errorCount ++;
+inc r1; // r1 is errorCount
+endif;
+if (parrities != 0):
+bne r0 0 endif;
+	errorCount ++;
+inc r1;
+endif;
+errorCount = errorCount << 6				// errorCount = f1f000 0000
+shiftl r1 6;
+toSave = topHalf					// toSave = b11b10b9b8 b7b6b5p8 with incorrect bit flipped
+mov r2 r5;
+	toSave = toSave >> 5;				// toSave = 0000 0b11b10b9  with incorrect bit flipped
+shiftr r2 5;
+	toSave = toSave OR errorCount			// toSave = f1f000 0b11b10b9  with incorrect bit flipped
+or r2 r1;
+	mem[i-31] = toSave; 
+store r2 r7
+inc r7
+botHalf = botHalf  >> 3;				// botHalf = 000b4 b3b2p4b1  with incorrect bit flipped
+mov r0 r6;
+shiftr r0 3;
+temp = botHalf;
+mov r1 r6;
+botHalf = botHalf AND 0000 0001;			// botHalf = 0000 000b1  with incorrect bit flipped
+and r0 1;
+temp = botHalf >> 1;					// temp = 0000 b4b3b2p4  with incorrect bit flipped
+shiftr r1 1;
+temp = temp AND 0000 1110;			// temp = 0000 b4b3b20 with incorrect bit flipped
+and r1 14
+botHalf = botHalf AND temp;				// botHalf = 0000 b4b3b2b1  with incorrect bit flipped
+and r0 r1
+topBits = topHalf;					// topBits = b11b10b9b8 b7b6b5p8  with incorrect bit flipped
+movr r2 r5;
+topBits = topBits << 3;					// topBits = b8b7b6b5 p8000  with incorrect bit flipped
+shiftr r2 3;
+topBits = topBits AND 1111 0000;
+and r2 240;
+botHalf = botHalf AND topBits;			// botHalf = b8b7b6b5 b4b3b2b1
+and r0 r2;
+mem[i-30] = botHalf;
+store r0 r7;
+inc r7;
+i++;
+Inc r4
+	i++;
+Inc r4
