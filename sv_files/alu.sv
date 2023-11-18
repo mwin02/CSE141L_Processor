@@ -10,6 +10,7 @@ module alu(
 
 always_comb begin
   rslt = 'b0;
+  zero = 'b0;
   if (ALU_Op == 2'b00) begin
 	  case(alu_cmd)
 		3'b001: // left_shift
@@ -33,8 +34,9 @@ always_comb begin
   else if (ALU_Op == 2'b10)
     rslt = inA + 1;
   else 
-    rslt = inA - inB;
+    rslt = inA ^ inB;
   zero = !rslt;
+  $display("ALU inA: %b, inB: %b, rslt: %b, zero: %b", inA, inB, rslt, zero);
 end
 
 

@@ -11,15 +11,18 @@ module PC #(parameter D=12)(
   output logic[D-1:0] prog_ctr
 );
 
-  always_ff @(posedge clk)
-   if(reset)
+
+  always_ff @(posedge clk) begin
+   $display("branch_en: %b", branch_en);
+	if(reset)
 	  prog_ctr <= '0;
 	else if(branch_en) begin
 	  if(reljump_en)
-	    prog_ctr <= prog_ctr + target;
-     else if(absjump_en)
-	    prog_ctr <= target;
+		 prog_ctr <= prog_ctr + target;
+	  else if(absjump_en)
+		 prog_ctr <= target;
+     $display("Program Counter: performing branch to %d, reljump_en: %b, absjump_en: %b", prog_ctr, reljump_en, absjump_en);
 	end else
 	  prog_ctr <= prog_ctr + 'b1;
-
+   end
 endmodule

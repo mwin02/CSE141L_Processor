@@ -12,8 +12,10 @@ module dat_mem (
   assign dat_out = core[addr];
 
 // writes are sequential (clocked) -- occur on stores or pushes 
-  always_ff @(posedge clk)
-    if(wr_en)				  // wr_en usually = 0; = 1 		
+  always_ff @(posedge clk) begin
+    if(wr_en) begin				  // wr_en usually = 0; = 1 		
       core[addr] <= dat_in; 
-
+      $display("data in: %b", dat_in);
+    end
+  end
 endmodule

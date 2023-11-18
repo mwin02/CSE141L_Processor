@@ -15,7 +15,11 @@ module top_level(
 
   wire[1:0] alu_op; 
   
-  logic zeroQ;                    // registered zero flag from ALU 
+  logic branchEnQ;
+  logic zeroQ;
+  
+  wire branch_en;
+  
   wire  relj, absj;                     // from control to PC; relative jump enable
   wire  zero,
 		  Branch,
@@ -31,12 +35,13 @@ module top_level(
   wire[7:0] immediate;
   wire[7:0] memDatOut;
   
-  assign branch_en = zeroQ & Branch;
+  assign branch_en = branchEnQ;
+  
 // fetch subassembly
   PC #(.D(D)) 					  // D sets program counter width
      pc1 (.reset            ,
           .clk              ,
-			 .branch_en (branch_en),
+		    .branch_en (branch_en),
 		    .reljump_en (relj),
 		    .absjump_en (absj),
 		    .target           ,
@@ -49,7 +54,7 @@ module top_level(
                .mach_code);
 					
 // lookup table to facilitate jumps/branches
-  assign jumpAddr = mach_code[2:0];
+  assign jumpAddr = mach_code[6:4];
   
   PC_LUT #(.D(D))
     pl1 (.addr  (jumpAddr),
@@ -59,7 +64,7 @@ module top_level(
 // control decoder
   Control ctl1(.opcode(mach_code[8:4]),
   .funct1(mach_code[6:4]),
-  .funct2(mach_code[0]),
+  .funct2(mach_code[6]),
   .Branch  , 
   .Write_Reg , 
   .Mem_Write   ,
@@ -70,23 +75,31 @@ module top_level(
   //TODO: Use control output to choose rd_addrA and rd_addrB
   
   assign alu_cmd  = mach_code[6:4];
-  assign relj = !mach_code[2];
-  assign absj = mach_code[2];
+  assign relj = !mach_code[6];
+  assign absj = mach_code[6];
   
   register_c_mux read1(.select(Reg_C),
-	.choice0 (mach_code[3:1]),
+	.choice0 (mach_code[2:0]),
 	.choice1 ({1'b0, mach_code[3:2]}),
-	.choice2 (mach_code[6:4]),
-	.choice3 ({1'b0, mach_code[6:5]}),
+	.choice2 (mach_code[5:3]),
+	.choice3 (3'b011),
 	.regNum(rd_addrA));
 	
   register_c_mux read2(.select(Reg_C),
-	.choice0 (mach_code[3:1]),
+	.choice0 (mach_code[2:0]),
 	.choice1 ({1'b0, mach_code[1:0]}),
-	.choice2 (mach_code[3:1]),
-	.choice3 ({1'b0, mach_code[4:3]}),
+	.choice2 (mach_code[2:0]),
+	.choice3 (3'b011),
 	.regNum(rd_addrB));
   
+  //TODO: choose data to write in
+  write_c_mux write1(.select(Write_C),
+	.choice0 (rslt),
+	.choice1 (memDatOut),
+	.choice2 (immediate),
+	.choice3 (datB),
+	.datOut(datWrite));
+
 
   reg_file #(.pw(3)) rf1(.dat_in(datWrite),	   // loads, most ops
               .clk         ,
@@ -100,37 +113,28 @@ module top_level(
 
   alu alu1(.alu_cmd(alu_cmd),
 		 .ALU_Op (alu_op),
-       .inA    (datA),
+       		 .inA    (datA),
 		 .inB    (datB),
 		 .rslt (rslt),
 		 .zero(zero));  
 
   dat_mem dm1(.dat_in(datA)  ,  // from reg_file
-             .clk           ,
-				 .wr_en  (Mem_Write), // stores
-				 .addr   (datB),
-             .dat_out(memDatOut));
+              .clk           ,
+	      .wr_en  (Mem_Write), // stores
+	      .addr   (datB),
+              .dat_out(memDatOut));
 				 
-
   
-  Imm_LUT imm1 (.index(mach_code[3:1]) ,
+  Imm_LUT imm1 (.index(mach_code[4:0]) ,
     .value(immediate));
 	 
-  //TODO: choose data to write in
-  write_c_mux write1(.select(Write_C),
-	.choice0 (rslt),
-	.choice1 (memDatOut),
-	.choice2 (immediate),
-	.choice3 (datB),
-	.datOut(datWrite));
-
-
 
 // registered flags from ALU
-  always_ff @(posedge clk) begin
-	 zeroQ <= zero;
+  always_ff @(negedge clk) begin
+	 branchEnQ <= !zero & Branch;
+	 $display("branchEnQ: %b", branchEnQ);
   end
 
-  assign done = prog_ctr == 128;
+  assign done = prog_ctr == 30;
  
 endmodule

@@ -3,14 +3,14 @@ module PC_LUT #(parameter D=12)(
   output logic[D-1:0] target);
 
   always_comb case(addr)
-	3'b000: target = 5;	  // go ahead 5 spaces
-   3'b001: target = -5;   // go back 5 spaces
-	3'b010: target = 20;   // go ahead 20 spaces
-	3'b011: target = -1;   // go back 1 space   
-	3'b100: target = 100;	  // go to instruction 100
-	3'b101: target = 200;	  // go to instruction 200
-	4'b110: target = 300;	  // go to instruction 300
-	5'b111: target = 400;	  // go to instruction 400
+	3'b000: target = 3;	  // go ahead 3 spaces
+   3'b001: target = 4;   // go back 4 spaces
+	3'b010: target = 8;   // go ahead 8 spaces
+	3'b011: target = 13;   // go back 13 space   
+	3'b100: target = 0;	  // go to instruction 100
+	3'b101: target = 0;	  // go to instruction 200
+	4'b110: target = 0;	  // go to instruction 300
+	5'b111: target = 0;	  // go to instruction 400
 	default: target = 'b0;  // hold PC  
   endcase
 
