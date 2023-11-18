@@ -138,8 +138,8 @@ class Assembler:
 
     def get_funct_code(self, instruction):
         funct_mapping = {
-            'shiftl': '000', 'shiftr': '001', 'and': '010', 'or': '011',
-            'xor': '100', 'noop': '101', 'par': '110', 'add': '111',
+            'shiftl': '001', 'shiftr': '010', 'and': '011', 'or': '100',
+            'xor': '101', 'noop': '110', 'par': '111',
             'bne': '00', 'load': '0', 'store': '1',
             'movi': '0', 'movr': '1'
         }
