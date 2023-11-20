@@ -136,7 +136,7 @@ and r1 r3       // temp = temp AND 14
 or r0 r1        // bh = bh OR temp
 movr r2 r5      // r2 = th = th(saved)
 movi r3 3
-shiftr r2 r3    // th = th << 3
+shiftl r2 r3    // th = th << 3
 movi r3 240
 and r2 r3       // th = th AND 240
 or r0 r2        // bh = bh OR th
