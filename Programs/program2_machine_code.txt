@@ -136,7 +136,7 @@
 001000001	// or r0 r1        // bh = bh OR temp
 111010101	// movr r2 r5      // r2 = th = th(saved)
 110000011	// movi r3 3
-000101011	// shiftr r2 r3    // th = th << 3
+000011011	// shiftl r2 r3    // th = th << 3
 110010101	// movi r3 240
 000111011	// and r2 r3       // th = th AND 240
 001000010	// or r0 r2        // bh = bh OR th
