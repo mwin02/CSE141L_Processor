@@ -1,7 +1,7 @@
 // control decoder
 module Control (
   input [4:0] opcode,
-  input [2:0] funct1,
+  input funct1,
   input funct2,// subset of machine code (any width you need)
   output logic Branch, Write_Reg, Mem_Write, 
   output logic[1:0] ALU_Op,
@@ -21,7 +21,7 @@ always_comb begin
   if (opcode == 5'b00000) begin	// a type
     Reg_C = 2'b00;
 	 Write_Reg = 1'b1;
-	 if (funct2 == 1'b0)
+	 if (funct1 == 1'b0)
 	   ALU_Op = 2'b10;
     else
 	   ALU_Op = 2'b01;
@@ -29,7 +29,7 @@ always_comb begin
     Reg_C = 2'b01;
 	 Write_Reg = 1'b1;
 	 ALU_Op = 2'b00;
-	 if (funct1 == 3'b110)
+	 if (opcode[2:0] == 3'b110)
 	   Write_Reg = 1'b0;
   end else if (opcode[4:3] == 2'b01) begin	// load / store
     Reg_C = 2'b10;

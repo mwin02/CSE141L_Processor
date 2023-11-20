@@ -63,7 +63,7 @@ module top_level(
 			
 // control decoder
   Control ctl1(.opcode(mach_code[8:4]),
-  .funct1(mach_code[6:4]),
+  .funct1(mach_code[3]),
   .funct2(mach_code[6]),
   .Branch  , 
   .Write_Reg , 
@@ -135,6 +135,6 @@ module top_level(
 	 $display("branchEnQ: %b", branchEnQ);
   end
 
-  assign done = prog_ctr == 30;
+  assign done = prog_ctr == 105;
  
 endmodule

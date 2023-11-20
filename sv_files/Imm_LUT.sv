@@ -27,7 +27,8 @@ module Imm_LUT (
 		20: value = 225;	
 		21: value = 240;	
 		22: value = 247;	
-		23: value = 254;	
+		23: value = 254;
+	   24: value = 85;	
 	default: value = 0;  // hold PC
     endcase
     $display("Imm_LUT index: %b, value: %b", index, value);
