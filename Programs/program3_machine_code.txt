@@ -119,7 +119,7 @@
 000000101	// inc r5          //    aCount++
 001100000	// noop
 000000100	// inc r4          // i++
-111011001	// movr r3 31
+110001010	// movi r3 31
 111010011	// movr r2 r3
 111011100	// movr r3 r4
 101111011	// bne r2 r3 startloop4  // if i != 31 go to startloop4
