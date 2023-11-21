@@ -52,7 +52,7 @@ class Assembler:
                 except Exception as e:
                     print(f'Error processing line: {line}')
                     print(f'Error details: {e}')
-                    machine_code.append('001100000\terror')
+                    machine_code.append('001100000')
 
         with open(output_file, 'w') as file:
             for idx, instruction in enumerate(machine_code):
