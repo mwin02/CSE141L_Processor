@@ -2,7 +2,7 @@
 111100011	// movr r4 r3
 110000000	// movi r3 0
 111111011	// movr r7 r3
-001100000	error	// startloop2:
+001100000	// startloop2:
 110000000	// movi r3 0
 111000011	// movr r0 r3       // r0 = pbits = 0
 111011100	// movr r3 r4
