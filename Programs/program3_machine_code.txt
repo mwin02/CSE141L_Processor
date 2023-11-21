@@ -65,7 +65,7 @@
 000000111	// inc r7
 110000000	// movi r3 0
 111100011	// movr r4 r3       // r4 = i = 0
-001100000	error	// startloop4:
+001100000	// startloop4:
 111011100	// movr r3 r4
 010001011	// load r1 r3      // r1 = fByte = mem[i]
 000000011	// inc r3
