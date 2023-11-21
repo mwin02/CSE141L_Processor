@@ -2,7 +2,7 @@
 111100011	// movr r4 r3       // r4 = i = 0
 110001001	// movi r3 30
 111111011	// movr r7 r3
-001100000	error	// startloop:      // while (i != 30):
+001100000	// startloop:      // while (i != 30):
 110000000	// movi r3 0
 111000011	// movr r0 r3       // r0 = pbits
 111011100	// movr r3 r4
