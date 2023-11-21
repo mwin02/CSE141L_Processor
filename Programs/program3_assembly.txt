@@ -51,7 +51,7 @@ inc r5          //    aCount++
 movi r3 1
 movr r2 r3      //    seen = 1
 movi r3 1
-bne r1 r3 +2    // if (seen == 1)
+bne r2 r3 +2    // if (seen == 1)
 inc r6          //    bCount++
 noop
 inc r4          // i++
