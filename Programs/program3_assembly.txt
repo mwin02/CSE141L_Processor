@@ -119,7 +119,7 @@ bne r1 r0 +2    // if (fByte == pat)
 inc r5          //    aCount++
 noop
 inc r4          // i++
-movr r3 31
+movi r3 31
 movr r2 r3
 movr r3 r4
 bne r2 r3 startloop4  // if i != 31 go to startloop4
