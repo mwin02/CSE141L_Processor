@@ -13,7 +13,6 @@ module PC #(parameter D=12)(
 
 
   always_ff @(posedge clk) begin
-   $display("branch_en: %b", branch_en);
 	if(reset)
 	  prog_ctr <= '0;
 	else if(branch_en) begin
@@ -21,7 +20,8 @@ module PC #(parameter D=12)(
 		 prog_ctr <= prog_ctr + target;
 	  else if(absjump_en)
 		 prog_ctr <= target;
-     $display("Program Counter: performing branch to %d, reljump_en: %b, absjump_en: %b", prog_ctr, reljump_en, absjump_en);
+	  else
+	    prog_ctr <= prog_ctr + 'b1;
 	end else
 	  prog_ctr <= prog_ctr + 'b1;
    end

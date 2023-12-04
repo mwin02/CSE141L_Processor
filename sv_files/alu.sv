@@ -36,7 +36,6 @@ always_comb begin
   else 
     rslt = inA ^ inB;
   zero = !rslt;
-  $display("ALU inA: %b, inB: %b, rslt: %b, zero: %b", inA, inB, rslt, zero);
 end
 
 

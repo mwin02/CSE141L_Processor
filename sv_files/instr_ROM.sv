@@ -7,25 +7,10 @@ module instr_ROM #(parameter D=12)(
 
   logic[8:0] core[2**D];
   initial							    // load the program
-    $readmemb("C:\/Users\/david\/OneDrive\/Desktop\/CSE 141L Milestone 2\/machine_code\/test_machine.txt",core);
+    $readmemb("C:\/Users\/david\/OneDrive\/Desktop\/CSE 141L Milestone 2\/machine_code\/program3_machine_code.txt",core);
 
   always_comb begin
     mach_code = core[prog_ctr];
-    $display("pc: %d, instruction: %b",prog_ctr, mach_code);
   end
 
 endmodule
-
-
-/*
-sample mach_code.txt:
-
-001111110		 // ADD r0 r1 r0
-001100110
-001111010
-111011110
-101111110
-001101110
-001000010
-111011110
-*/

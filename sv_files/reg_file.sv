@@ -17,13 +17,12 @@ module reg_file #(parameter pw=3)(
   always_comb begin
     datA_out = core[rd_addrA];
     datB_out = core[rd_addrB];
-    $display("Register File: rd_addrA: %b, rd_addrB: %b, datA_out: %b, datB_out: %b", rd_addrA, rd_addrB, datA_out, datB_out);
+
   end
 
 // writes are sequential (clocked)
   always_ff @(posedge clk) begin
     if(wr_en) begin				   // anything but stores or no ops
-      $display("register write at %b writing value: %b", wr_addr, dat_in);	
       core[wr_addr] <= dat_in; 
     end
   end

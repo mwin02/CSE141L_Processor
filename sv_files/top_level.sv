@@ -35,7 +35,7 @@ module top_level(
   wire[7:0] immediate;
   wire[7:0] memDatOut;
 
-  assign branch_en = branchEnQ;
+  assign branch_en = !zeroQ & branchEnQ;
 
 // fetch subassembly
   PC #(.D(D)) 					  // D sets program counter width
@@ -131,10 +131,10 @@ module top_level(
 
 // registered flags from ALU
   always_ff @(negedge clk) begin
-	 branchEnQ <= !zero & Branch;
-	 $display("branchEnQ: %b", branchEnQ);
+   zeroQ <= zero;
+	 branchEnQ <= Branch;
   end
 
-  assign done = prog_ctr == 157;
+  assign done = prog_ctr == 151;
 
 endmodule

@@ -14,7 +14,6 @@ always_comb begin
         2'b10: datOut = choice2;
         2'b11: datOut = choice3;
     endcase
-    $display("Write_C_Mux select: %b, 0:%b, 1: %b, 2: %b, 3: %b, datOut: %b", select, choice0, choice1, choice2, choice3, datOut);
 end
 
 endmodule

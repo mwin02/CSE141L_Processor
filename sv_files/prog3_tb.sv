@@ -25,12 +25,12 @@ top_level DUT(
 initial begin
 // program 3
 // pattern we are looking for; experiment w/ various values
-  pat = 5'b0000;//5'b10101;//$random;//5'b11111;
+  pat = 5'b00100;//5'b10101;//$random;//5'b11111;
   str2 = 0;
   DUT.dm1.core[32] = {pat,3'b0};
   for(int i=0; i<32; i++) begin
 // search field; experiment w/ various vales
-    mat_str[i] = 8'b00000000;//8'b01010101;// $random;// 8'b11111111;
+    mat_str[i] = $random;//8'b01010101;// $random;// 8'b11111111;
 	DUT.dm1.core[i] = mat_str[i];
 	str2 = (str2<<8)+mat_str[i];
   end
@@ -55,7 +55,7 @@ initial begin
   wait(done);               // wait for ack from DUT
   $display();
   $display("start program 3");
-  $display();
+  $display("pattern: %b", pat);
   $display("number of patterns w/o byte crossing    = %d %d",ctb,DUT.dm1.core[33]);   //160 max
   $display("number of bytes w/ at least one pattern = %d %d",cto,DUT.dm1.core[34]);   // 32 max
   $display("number of patterns w/ byte crossing     = %d %d",cts,DUT.dm1.core[35]);   //253 max
@@ -63,8 +63,8 @@ initial begin
 end
 
 always begin
-  #5ns clk = 1;            // tic
-  #5ns clk = 0;			   // toc
+  #1ns clk = 1;            // tic
+  #1ns clk = 0;			   // toc
 end
 
 endmodule

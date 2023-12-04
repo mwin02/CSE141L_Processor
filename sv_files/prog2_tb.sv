@@ -110,8 +110,8 @@ initial begin
 end
 
 always begin
-  #5ns clk = 1;            // tic
-  #5ns clk = 0;			   // toc
+  #1ns clk = 1;            // tic
+  #1ns clk = 0;			   // toc
 end
 
 endmodule

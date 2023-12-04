@@ -15,7 +15,6 @@ module dat_mem (
   always @(posedge clk) begin
     if(wr_en) begin				  // wr_en usually = 0; = 1
       core[addr] <= dat_in;
-      $display("data in: %b", dat_in);
     end
   end
 endmodule

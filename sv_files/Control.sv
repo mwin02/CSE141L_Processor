@@ -9,7 +9,6 @@ module Control (
 
 always_comb begin
 // defaults
-  $display("opcode: %b", opcode);
   Branch 	=  'b0;   // 1: branch (jump)
   Write_Reg =	'b0;   // 
   Mem_Write =	'b0;   // 
@@ -46,7 +45,6 @@ always_comb begin
 	 Write_Reg = 1'b1;
 	 Write_C = {1'b1, funct2};
   end
-  $display("Branch: %b, Write_Reg: %b, Mem_Write: %b, Reg_C: %b, Write_C: %b, ALU_Op: %b", Branch, Write_Reg, Mem_Write, Reg_C, Write_C, ALU_Op);
 
 end
 	

@@ -32,8 +32,7 @@ module Imm_LUT (
      25: value = 171;
      26: value = 90;
 	default: value = 0;  // hold PC
-    endcase
-    $display("Imm_LUT index: %b, value: %b", index, value);
+   endcase
   end
 
 endmodule
