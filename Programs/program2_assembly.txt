@@ -100,8 +100,8 @@ load r1 r3      //    r1 = th = mem[i+1]
 movr r5 r1      //    r5 = th(saved)
 movr r6 r2      //    r6 = bh(saved)
 movi r3 0
+movr r1 r3      //    r1 = eCount = 0
 movi r3 1
-noop
 noop
 noop
 noop
