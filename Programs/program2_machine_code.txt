@@ -100,6 +100,7 @@
 111101001	// movr r5 r1      //    r5 = th(saved)
 111110010	// movr r6 r2      //    r6 = bh(saved)
 110000000	// movi r3 0
+111001011	// movr r1 r3      //    r1 = eCount = 0
 110000001	// movi r3 1
 001100000	// noop
 001100000	// noop
