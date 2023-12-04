@@ -71,51 +71,48 @@
 000000011	// inc r3
 010010011	// load r2 r3      // r2 = sByte = mem[i + 1]
 110000100	// movi r3 4
-000100111	// shiftr r1 r3    // fByte = fByte >> 4
-000011011	// shiftl r2 r3    // sByte = sByte << 4
+000101011	// shiftr r2 r3    // sByte = sByte >> 4
+000010111	// shiftl r1 r3    // fByte = fByte << 4
 110001000	// movi r3 16
-000111011	// and r2 r3       // sByte = sByte AND 16
-001000110	// or r1 r2        // fByte = fByte OR sByte
-100000100	// bne r1 r0 +2    // if (fByte == pat)
+000110111	// and r1 r3       // fByte = fByte AND 16
+001001001	// or r2 r1        // sByte = fByte OR sByte
+100001000	// bne r2 r0 +2    // if (fByte == pat)
 000000101	// inc r5          //    aCount++
 001100000	// noop
 110000001	// movi r3 1
-000100111	// shiftr r1 r3    // fByte = fByte >> 1
+000101011	// shiftr r2 r3    // sByte = sByte >> 1
 111011100	// movr r3 r4
-000000011	// inc r3
-010010011	// load r2 r3      // r2 = sByte = mem[i+1]
+010001011	// load r1 r3      // r1 = fByte = mem[i]
 110000011	// movi r3 3
-000011011	// shiftl r2 r3    // sByte = sByte << 3
+000010111	// shiftl r1 r3    // fByte = fByte << 3
 110001000	// movi r3 16
-000111011	// and r2 r3       // sByte = sByte AND 16
-001000110	// or r1 r2        // fByte = fByte OR sByte
-100000100	// bne r1 r0 +2    // if (fByte == pat)
+000110111	// and r1 r3       // fByte = fByte AND 16
+001001001	// or r2 r1        // sByte = fByte OR sByte
+100001000	// bne r2 r0 +2    // if (sByte == pat)
 000000101	// inc r5          //    aCount++
 001100000	// noop
 110000001	// movi r3 1
-000100111	// shiftr r1 r3    // fByte = fByte >> 1
+000101011	// shiftr r2 r3    // sByte = sByte >> 1
 111011100	// movr r3 r4
-000000011	// inc r3
-010010011	// load r2 r3      // r2 = sByte = mem[i+1]
+010001011	// load r1 r3      // r1 = fByte = mem[i+1]
 110000010	// movi r3 2
-000011011	// shiftl r2 r3    // sByte = sByte << 2
+000010111	// shiftl r1 r3    // fByte = fByte << 2
 110001000	// movi r3 16
-000111011	// and r2 r3       // sByte = sByte AND 16
-001000110	// or r1 r2        // fByte = fByte OR sByte
-100000100	// bne r1 r0 +2    // if (fByte == pat)
+000110111	// and r1 r3       // fByte = fByte AND 16
+001001001	// or r2 r1        // sByte = fByte OR sByte
+100001000	// bne r2 r0 +2    // if (sByte == pat)
 000000101	// inc r5          //    aCount++
 001100000	// noop
 110000001	// movi r3 1
-000100111	// shiftr r1 r3    // fByte = fByte >> 1
+000101011	// shiftr r2 r3    // sByte = sByte >> 1
 111011100	// movr r3 r4
-000000011	// inc r3
-010010011	// load r2 r3      // r2 = sByte = mem[i+1]
+010001011	// load r1 r3      // r1 = fByte = mem[i+1]
 110000001	// movi r3 1
-000011011	// shiftl r2 r3    // sByte = sByte << 1
+000010111	// shiftl r1 r3    // fByte = fByte << 1
 110001000	// movi r3 16
-000111011	// and r2 r3       // sByte = sByte AND 16
-001000110	// or r1 r2        // fByte = fByte OR sByte
-100000100	// bne r1 r0 +2    // if (fByte == pat)
+000110111	// and r1 r3       // fByte = fByte AND 16
+001001001	// or r2 r1        // sByte = fByte OR sByte
+100001000	// bne r2 r0 +2    // if (sByte == pat)
 000000101	// inc r5          //    aCount++
 001100000	// noop
 000000100	// inc r4          // i++
