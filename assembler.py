@@ -152,5 +152,5 @@ if __name__ == "__main__":
     assembler = Assembler()
     assembler.assemble('program1_assembly.txt', 'program1_machine_code.txt')
     assembler.assemble('program2_assembly.txt', 'program2_machine_code.txt')
-    assembler.assemble('/program3_assembly.txt', 'program3_machine_code.txt')
+    assembler.assemble('program3_assembly.txt', 'program3_machine_code.txt')
     assembler.assemble('test.txt','test_machine.txt')
